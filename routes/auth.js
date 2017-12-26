@@ -5,7 +5,7 @@ module.exports = function (app, db) {
     app.post('/api/user', (req, res) => {
         let login = req.body.login;
         let password = req.body.password;
-        if (login === undefined || login === '' || password === undefined || password === '') {
+        if (!login || !password) {
             res.send(response.incorrectRequest('Отсутствует логин или пароль'));
             return;
         }
@@ -25,13 +25,13 @@ module.exports = function (app, db) {
     app.post('/api/session', (req, res) => {
         let login = req.body.login;
         let password = req.body.password;
-        if (login === undefined || login === '' || password === undefined || password === '') {
+        if (!login || !password) {
             res.send(response.incorrectRequest('Отсутствует логин или пароль'));
             return;
         }
         db.collection('users').findOne({'login': login})
             .then((user) => {
-                if (user !== null && passwordEncoder.matches(password, user.password)) {
+                if (user && passwordEncoder.matches(password, user.password)) {
                     req.session.login = login;
                     res.send(response.ok(login));
                 } else {
@@ -44,13 +44,13 @@ module.exports = function (app, db) {
 
     app.get('/api/session', (req, res) => {
         let login = req.session.login;
-        if (login === undefined) {
+        if (!login) {
             res.send(response.authError());
             return;
         }
         db.collection('users').findOne({'login': login})
             .then((user) => {
-                if (user !== null) {
+                if (!user) {
                     res.send(response.ok(login));
                 } else {
                     res.send(response.authError())
@@ -62,7 +62,7 @@ module.exports = function (app, db) {
 
     app.delete('/api/session', (req, res) => {
         let login = req.session.login;
-        if (login !== undefined) {
+        if (login) {
             req.session.login = undefined;
             res.send(response.ok(login));
         } else {
