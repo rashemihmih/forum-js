@@ -35,7 +35,7 @@ module.exports = function (app, db) {
             res.send(response.authError());
             return;
         }
-        db.collection('users').find({'login': login}).toArray()
+        db.collection('users').findOne({'login': login})
             .then((user) => {
                 if (user) {
                     return db.collection('forums').find({}).toArray();
