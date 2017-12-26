@@ -19,18 +19,14 @@ module.exports = function (app, db) {
                     return;
                 }
                 return db.collection('forums').findOne({'title': title})
-            }, () => {
-                res.send(response.dbError())
-            })
+            }, () => res.send(response.dbError()))
             .then((forum) => {
                 if (forum) {
                     res.send(response.ok(forum));
                 } else {
                     res.send(response.entryNotFound())
                 }
-            }, () => {
-                res.send(response.dbError())
-            });
+            }, () => res.send(response.dbError()));
     });
 
     app.get('/api/forum/list', (req, res) => {
@@ -46,13 +42,7 @@ module.exports = function (app, db) {
                 } else {
                     res.send(response.authError())
                 }
-            }, () => {
-                res.send(response.dbError())
-            })
-            .then((forums) => {
-                res.send(response.ok(forums))
-            }, () => {
-                res.send(response.dbError())
-            });
+            }, () => res.send(response.dbError()))
+            .then((forums) => res.send(response.ok(forums)), () => res.send(response.dbError()));
     })
 };

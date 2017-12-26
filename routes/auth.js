@@ -37,9 +37,7 @@ module.exports = function (app, db) {
                 } else {
                     res.send(response.authError())
                 }
-            }, () => {
-                res.send(response.dbError())
-            })
+            }, () => res.send(response.dbError()))
     });
 
     app.get('/api/session', (req, res) => {
@@ -55,9 +53,7 @@ module.exports = function (app, db) {
                 } else {
                     res.send(response.authError())
                 }
-            }, () => {
-                res.send(response.dbError())
-            })
+            }, () => res.send(response.dbError()))
     });
 
     app.delete('/api/session', (req, res) => {
