@@ -48,7 +48,7 @@ module.exports = function (app, db) {
         }
         db.collection('users').findOne({'login': login})
             .then((user) => {
-                if (!user) {
+                if (user) {
                     res.send(response.ok(login));
                 } else {
                     res.send(response.authError())
