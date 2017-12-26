@@ -6,7 +6,7 @@ function getFormattedDate() {
     let hours = formatWithPadding(date.getHours());
     let minutes = formatWithPadding(date.getMinutes());
     let seconds = formatWithPadding(date.getSeconds());
-    return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
 function formatWithPadding(number) {
