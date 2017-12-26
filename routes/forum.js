@@ -43,6 +43,10 @@ module.exports = function (app, db) {
                     res.send(response.authError())
                 }
             }, () => res.send(response.dbError()))
-            .then((forums) => res.send(response.ok(forums)), () => res.send(response.dbError()));
+            .then((forums) => {
+                if (forums) {
+                    res.send(response.ok(forums))
+                }
+            }, () => res.send(response.dbError()));
     })
 };
