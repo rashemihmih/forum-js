@@ -100,7 +100,7 @@ module.exports = function (app, db) {
                     return;
                 }
                 let forum = req.body.forum;
-                db.collection('forums').deleteOne({'forum': forum});
+                db.collection('forums').deleteOne({'title': forum});
                 db.collection('threads').deleteMany({'forum': forum});
                 return forum;
             }, () => res.send(response.dbError()))
