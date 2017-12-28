@@ -37,6 +37,7 @@ module.exports = function (app, db) {
             res.send(response.authError());
             return;
         }
+        let thread = {};
         db.collection('users').findOne({'login': login})
             .then((user) => {
                 if (!user) {
@@ -51,7 +52,7 @@ module.exports = function (app, db) {
                     return;
                 }
                 let time = date.getFormattedDate();
-                let thread = {
+                thread = {
                     'forum': forum,
                     'title': title,
                     'message': message,
@@ -61,7 +62,7 @@ module.exports = function (app, db) {
                 };
                 return db.collection('threads').insertOne(thread)
             }, () => res.send(response.dbError()))
-            .then(() => res.send(response.ok()), () => res.send(response.dbError()))
+            .then(() => res.send(response.ok(thread)), () => res.send(response.dbError()))
     });
 
     app.get('/api/thread/list', (req, res) => {
