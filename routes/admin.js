@@ -99,12 +99,12 @@ module.exports = function (app, db) {
                     res.send(response.authError());
                     return;
                 }
-                let forum = req.body.forum;
-                db.collection('forums').deleteOne({'title': forum});
+                let title = req.body.title;
+                db.collection('forums').deleteOne({'title': title});
                 db.collection('threads').deleteMany({'forum': forum});
-                return forum;
+                return title;
             }, () => res.send(response.dbError()))
-            .then((forum) => res.send(response.ok(forum)), () => res.send(response.dbError()))
+            .then((title) => res.send(response.ok(title)), () => res.send(response.dbError()))
     });
 
     app.post('/admin/forum/rename', (req, res) => {
