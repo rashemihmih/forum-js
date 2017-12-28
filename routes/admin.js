@@ -102,9 +102,8 @@ module.exports = function (app, db) {
                 let title = req.body.title;
                 db.collection('forums').deleteOne({'title': title});
                 db.collection('threads').deleteMany({'forum': forum});
-                return title;
+                res.send(response.ok(title));
             }, () => res.send(response.dbError()))
-            .then((title) => res.send(response.ok(title)), () => res.send(response.dbError()))
     });
 
     app.post('/admin/forum/rename', (req, res) => {
