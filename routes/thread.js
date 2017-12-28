@@ -82,7 +82,8 @@ module.exports = function (app, db) {
                 if (!forum || isNaN(offset) || isNaN(limit)) {
                     res.send(response.incorrectRequest('Параметры forum, offset, limit обязательные'));
                 } else {
-                    return db.collection('threads').find({'forum': forum}).skip(offset).limit(limit).toArray()
+                    return db.collection('threads').find({'forum': forum}).skip(offset).limit(limit)
+                        .sort({'lastUpdate': -1}).toArray()
                 }
             }, () => res.send(response.dbError()))
             .then((threads) => {
