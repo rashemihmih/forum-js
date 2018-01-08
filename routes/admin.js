@@ -60,12 +60,23 @@ module.exports = function (app, db) {
                     return;
                 }
                 let login = req.body.login;
-                db.collection('users').deleteOne({'login': login});
-                db.collection('threads').deleteMany({'user': login});
-                db.collection('posts').deleteMany({'user': login});
-                return login;
+                return db.collection('users').findOne({'login': login});
             }, () => res.send(response.dbError()))
-            .then((login) => res.send(response.ok(login)), () => res.send(response.dbError()))
+            .then(user => {
+                if (user.isAdmin || user.isMod) {
+                    res.send(response.incorrectRequest('Нельзя удалять модера или админа'));
+                    return;
+                }
+                db.collection('users').deleteOne({'login': user.login});
+                db.collection('threads').deleteMany({'user': user.login});
+                db.collection('posts').deleteMany({'user': user.login});
+                return user.login;
+            })
+            .then((login) => {
+                if (login) {
+                    res.send(response.ok(login));
+                }
+            }, () => res.send(response.dbError()))
     });
 
     app.post('/admin/forum', (req, res) => {
