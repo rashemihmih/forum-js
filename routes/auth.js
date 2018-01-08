@@ -13,7 +13,7 @@ module.exports = function (app, db) {
             .then(() => {
                 req.session.login = login;
                 res.send(response.ok(login))
-            }, (err) => {
+            }, err => {
                 if (err.message.startsWith('E11000')) {
                     res.send(response.duplicateEntry());
                 } else {
@@ -30,7 +30,7 @@ module.exports = function (app, db) {
             return;
         }
         db.collection('users').findOne({'login': login})
-            .then((user) => {
+            .then(user => {
                 if (user && passwordEncoder.matches(password, user.password)) {
                     req.session.login = login;
                     res.send(response.ok(login));
@@ -47,7 +47,7 @@ module.exports = function (app, db) {
             return;
         }
         db.collection('users').findOne({'login': login})
-            .then((user) => {
+            .then(user => {
                 if (user) {
                     res.send(response.ok(login));
                 } else {

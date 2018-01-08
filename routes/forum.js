@@ -8,7 +8,7 @@ module.exports = function (app, db) {
             return;
         }
         db.collection('users').findOne({'login': login})
-            .then((user) => {
+            .then(user => {
                 if (!user) {
                     res.send(response.authError());
                     return;
@@ -20,7 +20,7 @@ module.exports = function (app, db) {
                 }
                 return db.collection('forums').findOne({'title': title})
             }, () => res.send(response.dbError()))
-            .then((forum) => {
+            .then(forum => {
                 if (forum) {
                     res.send(response.ok(forum));
                 } else {
@@ -36,14 +36,14 @@ module.exports = function (app, db) {
             return;
         }
         db.collection('users').findOne({'login': login})
-            .then((user) => {
+            .then(user => {
                 if (user) {
                     return db.collection('forums').find({}).toArray();
                 } else {
                     res.send(response.authError())
                 }
             }, () => res.send(response.dbError()))
-            .then((forums) => {
+            .then(forums => {
                 if (forums) {
                     res.send(response.ok(forums))
                 }

@@ -10,7 +10,7 @@ module.exports = function (app, db) {
             return;
         }
         db.collection('users').findOne({'login': login})
-            .then((user) => {
+            .then(user => {
                 if (!user) {
                     res.send(response.authError());
                     return;
@@ -22,7 +22,7 @@ module.exports = function (app, db) {
                     return db.collection('threads').findOne({'_id': new ObjectID(_id)})
                 }
             })
-            .then((thread) => {
+            .then(thread => {
                 if (thread) {
                     res.send(response.ok(thread));
                 } else {
@@ -39,7 +39,7 @@ module.exports = function (app, db) {
         }
         let thread = {};
         db.collection('users').findOne({'login': login})
-            .then((user) => {
+            .then(user => {
                 if (!user) {
                     res.send(response.authError());
                     return;
@@ -72,7 +72,7 @@ module.exports = function (app, db) {
             return;
         }
         db.collection('users').findOne({'login': login})
-            .then((user) => {
+            .then(user => {
                 if (!user) {
                     res.send(response.authError());
                     return;
@@ -87,7 +87,7 @@ module.exports = function (app, db) {
                         .sort({'lastUpdate': -1}).toArray()
                 }
             }, () => res.send(response.dbError()))
-            .then((threads) => {
+            .then(threads => {
                 if (threads) {
                     res.send(response.ok(threads))
                 }

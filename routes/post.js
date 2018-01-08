@@ -10,7 +10,7 @@ module.exports = function (app, db) {
             return;
         }
         db.collection('users').findOne({'login': login})
-            .then((user) => {
+            .then(user => {
                 if (!user) {
                     res.send(response.authError());
                     return;
@@ -42,7 +42,7 @@ module.exports = function (app, db) {
             return;
         }
         db.collection('users').findOne({'login': login})
-            .then((user) => {
+            .then(user => {
                 if (!user) {
                     res.send(response.authError());
                     return;
@@ -56,7 +56,7 @@ module.exports = function (app, db) {
                     return db.collection('posts').find({'threadId': thread}).skip(offset).limit(limit).toArray()
                 }
             }, () => res.send(response.dbError()))
-            .then((posts) => {
+            .then(posts => {
                 if (posts) {
                     res.send(response.ok(posts))
                 }

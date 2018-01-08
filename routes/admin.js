@@ -11,7 +11,7 @@ module.exports = function (app, db) {
             return;
         }
         db.collection('users').findOne({'login': login})
-            .then((user) => {
+            .then(user => {
                 if (user && passwordEncoder.matches(password, user.password) && (user.isAdmin || user.isMod)) {
                     req.session.login = login;
                     res.send(response.ok(login));
@@ -28,7 +28,7 @@ module.exports = function (app, db) {
             return;
         }
         db.collection('users').findOne({'login': login})
-            .then((user) => {
+            .then(user => {
                 if (user && (user.isAdmin || user.isMod)) {
                     res.send(response.ok(login));
                 } else {
@@ -54,7 +54,7 @@ module.exports = function (app, db) {
             return;
         }
         db.collection('users').findOne({'login': login})
-            .then((user) => {
+            .then(user => {
                 if (!user || !user.isMod) {
                     res.send(response.authError());
                     return;
@@ -72,7 +72,7 @@ module.exports = function (app, db) {
                 db.collection('posts').deleteMany({'user': user.login});
                 return user.login;
             })
-            .then((login) => {
+            .then(login => {
                 if (login) {
                     res.send(response.ok(login));
                 }
@@ -86,7 +86,7 @@ module.exports = function (app, db) {
             return;
         }
         db.collection('users').findOne({'login': login})
-            .then((user) => {
+            .then(user => {
                 if (!user || !user.isAdmin) {
                     res.send(response.authError());
                     return;
@@ -95,7 +95,7 @@ module.exports = function (app, db) {
                 db.collection('forums').insertOne({'title': title});
                 return title;
             }, () => res.send(response.dbError()))
-            .then((title) => res.send(response.ok(title)), () => res.send(response.dbError()))
+            .then(title => res.send(response.ok(title)), () => res.send(response.dbError()))
     });
 
     app.delete('/admin/forum', (req, res) => {
@@ -105,7 +105,7 @@ module.exports = function (app, db) {
             return;
         }
         db.collection('users').findOne({'login': login})
-            .then((user) => {
+            .then(user => {
                 if (!user || !user.isAdmin) {
                     res.send(response.authError());
                     return;
@@ -124,7 +124,7 @@ module.exports = function (app, db) {
             return;
         }
         db.collection('users').findOne({'login': login})
-            .then((user) => {
+            .then(user => {
                 if (!user || !user.isAdmin) {
                     res.send(response.authError());
                     return;
@@ -134,7 +134,7 @@ module.exports = function (app, db) {
                 db.collection('forums').updateOne({'title': oldTitle}, {$set: {'title': newTitle}});
                 return newTitle;
             }, () => res.send(response.dbError()))
-            .then((newTitle) => res.send(response.ok(newTitle)), () => res.send(response.dbError()))
+            .then(newTitle => res.send(response.ok(newTitle)), () => res.send(response.dbError()))
     });
 
     app.delete('/admin/thread', (req, res) => {
@@ -144,7 +144,7 @@ module.exports = function (app, db) {
             return;
         }
         db.collection('users').findOne({'login': login})
-            .then((user) => {
+            .then(user => {
                 if (!user || !user.isMod) {
                     res.send(response.authError());
                     return;
@@ -154,7 +154,7 @@ module.exports = function (app, db) {
                 db.collection('posts').deleteMany({'threadId': thread});
                 return thread;
             }, () => res.send(response.dbError()))
-            .then((thread) => res.send(response.ok(thread)), () => res.send(response.dbError()))
+            .then(thread => res.send(response.ok(thread)), () => res.send(response.dbError()))
     });
 
     app.delete('/admin/post', (req, res) => {
@@ -164,7 +164,7 @@ module.exports = function (app, db) {
             return;
         }
         db.collection('users').findOne({'login': login})
-            .then((user) => {
+            .then(user => {
                 if (!user || !user.isMod) {
                     res.send(response.authError());
                     return;
@@ -173,7 +173,7 @@ module.exports = function (app, db) {
                 db.collection('posts').deleteOne({'_id': new ObjectID(post)});
                 return post;
             }, () => res.send(response.dbError()))
-            .then((post) => res.send(response.ok(post)), () => res.send(response.dbError()))
+            .then(post => res.send(response.ok(post)), () => res.send(response.dbError()))
     });
 
     app.get('/admin/user/list', (req, res) => {
@@ -183,16 +183,16 @@ module.exports = function (app, db) {
             return;
         }
         db.collection('users').findOne({'login': login})
-            .then((user) => {
+            .then(user => {
                 if (!user || !user.isMod) {
                     res.send(response.authError());
                     return;
                 }
                 return db.collection('users').find({}).toArray();
             }, () => res.send(response.dbError()))
-            .then((users) => {
+            .then(users => {
                 if (users) {
-                    users.forEach((user) => delete user.password);
+                    users.forEach(user => delete user.password);
                     res.send(response.ok(users))
                 }
             }, () => res.send(response.dbError()))
@@ -205,7 +205,7 @@ module.exports = function (app, db) {
             return;
         }
         db.collection('users').findOne({'login': login})
-            .then((user) => {
+            .then(user => {
                 if (!user || !user.isAdmin) {
                     res.send(response.authError());
                     return;
@@ -218,7 +218,7 @@ module.exports = function (app, db) {
                 db.collection('users').updateOne({'login': modLogin}, {$set: {'isMod': mod}});
                 return modLogin;
             }, () => res.send(response.dbError()))
-            .then((modLogin) => {
+            .then(modLogin => {
                 if (modLogin) {
                     res.send(response.ok(modLogin))
                 }
