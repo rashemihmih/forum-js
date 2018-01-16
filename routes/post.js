@@ -15,23 +15,38 @@ module.exports = function (app, db) {
                     res.send(response.authError());
                     return;
                 }
-                let message = req.body.message;
-                let threadId = req.body.threadId;
-                if (!message || !threadId) {
+                if (!req.body.message || !req.body.message) {
                     res.send(response.incorrectRequest('Параметры message, threadId обязательные'));
                     return;
                 }
+                return db.collection('posts').findOne({'_id': new ObjectID(req.body.parent)});
+            }, () => res.send(response.dbError()))
+            .then((parent) => {
                 let time = date.getFormattedDate();
                 let post = {
-                    'user': user.login,
-                    'message': message,
-                    'threadId': threadId,
-                    'parent': req.body.parent,
+                    'user': login,
+                    'message': req.body.message,
+                    'threadId': req.body.threadId,
                     'creationTime': time,
                 };
-                db.collection('threads').updateOne({'_id': new ObjectID(threadId)}, {$set: {'lastUpdate': time}});
+                if (parent) {
+                    post.parent = req.body.parent;
+                }
+                db.collection('threads').updateOne({'_id': new ObjectID(req.body.threadId)},
+                    {$set: {'lastUpdate': time}});
                 return db.collection('posts').insertOne(post);
-            }, () => res.send(response.dbError()))
+            }, () => {
+                let time = date.getFormattedDate();
+                let post = {
+                    'user': login,
+                    'message': req.body.message,
+                    'threadId': req.body.threadId,
+                    'creationTime': time,
+                };
+                db.collection('threads').updateOne({'_id': new ObjectID(req.body.threadId)},
+                    {$set: {'lastUpdate': time}});
+                return db.collection('posts').insertOne(post);
+            })
             .then(() => res.send(response.ok()), () => res.send(response.dbError()))
     });
 
